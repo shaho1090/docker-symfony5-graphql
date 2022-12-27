@@ -42,6 +42,9 @@ class User
     #[ORM\OneToMany(mappedBy: 'reporter', targetEntity: DelayReport::class)]
     private Collection $delayReports;
 
+    #[ORM\Column(length: 255)]
+    private string $password;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -212,6 +215,18 @@ class User
                 $delayReport->setReporter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }
