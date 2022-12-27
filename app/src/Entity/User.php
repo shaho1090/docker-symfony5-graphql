@@ -38,7 +38,7 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: 'ccourier', targetEntity: Trip::class)]
+    #[ORM\OneToMany(mappedBy: 'courier', targetEntity: Trip::class)]
     private Collection $trips;
 
     #[ORM\OneToMany(mappedBy: 'reporter', targetEntity: DelayReport::class)]
@@ -158,7 +158,7 @@ class User implements PasswordAuthenticatedUserInterface
     {
         if (!$this->trips->contains($trip)) {
             $this->trips->add($trip);
-            $trip->setCcourier($this);
+            $trip->setCourier($this);
         }
 
         return $this;
@@ -168,8 +168,8 @@ class User implements PasswordAuthenticatedUserInterface
     {
         if ($this->trips->removeElement($trip)) {
             // set the owning side to null (unless already changed)
-            if ($trip->getCcourier() === $this) {
-                $trip->setCcourier(null);
+            if ($trip->getCourier() === $this) {
+                $trip->setCourier(null);
             }
         }
 
