@@ -26,13 +26,13 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $referenceUser = $this->getFakeUser();
-
         for ($i = 0; $i < 10; $i++) {
             $manager->persist(
-                $referenceUser
+                $this->getFakeUser()
             );
         }
+
+        $referenceUser = $this->getFakeUser();
 
         $this->addReference(self::REFERENCE, $referenceUser);
 
