@@ -15,7 +15,7 @@ class Trip
 
     #[ORM\ManyToOne(inversedBy: 'trips')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $ccourier = null;
+    private ?User $courier = null;
 
     #[ORM\OneToOne(inversedBy: 'trip', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -29,14 +29,14 @@ class Trip
         return $this->id;
     }
 
-    public function getCcourier(): ?User
+    public function getCourier(): ?User
     {
-        return $this->ccourier;
+        return $this->courier;
     }
 
-    public function setCcourier(?User $ccourier): self
+    public function setCourier(?User $courier): self
     {
-        $this->ccourier = $ccourier;
+        $this->courier = $courier;
 
         return $this;
     }
