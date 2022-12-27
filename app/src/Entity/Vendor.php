@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VendorsRepository::class)]
-class Vendors
+class Vendor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,7 +25,7 @@ class Vendors
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
-    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Orders::class)]
+    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Order::class)]
     private Collection $orders;
 
     public function __construct()
@@ -75,14 +75,14 @@ class Vendors
     }
 
     /**
-     * @return Collection<int, Orders>
+     * @return Collection<int, Order>
      */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
-    public function addOrder(Orders $order): self
+    public function addOrder(Order $order): self
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
@@ -92,7 +92,7 @@ class Vendors
         return $this;
     }
 
-    public function removeOrder(Orders $order): self
+    public function removeOrder(Order $order): self
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)

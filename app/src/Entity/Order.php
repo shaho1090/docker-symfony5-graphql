@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrdersRepository::class)]
-class Orders
+class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,16 +30,16 @@ class Orders
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Users $owner = null;
+    private ?User $owner = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Vendors $vendor = null;
+    private ?Vendor $vendor = null;
 
     #[ORM\OneToOne(mappedBy: 'request', cascade: ['persist', 'remove'])]
-    private ?Trips $trips = null;
+    private ?Trip $trips = null;
 
-    #[ORM\OneToMany(mappedBy: 'request', targetEntity: DelayReports::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'request', targetEntity: DelayReport::class, orphanRemoval: true)]
     private Collection $delayReports;
 
     public function __construct()
@@ -100,36 +100,36 @@ class Orders
         return $this;
     }
 
-    public function getOwner(): ?Users
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
 
-    public function setOwner(?Users $owner): self
+    public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
 
         return $this;
     }
 
-    public function getVendor(): ?Vendors
+    public function getVendor(): ?Vendor
     {
         return $this->vendor;
     }
 
-    public function setVendor(?Vendors $vendor): self
+    public function setVendor(?Vendor $vendor): self
     {
         $this->vendor = $vendor;
 
         return $this;
     }
 
-    public function getTrips(): ?Trips
+    public function getTrips(): ?Trip
     {
         return $this->trips;
     }
 
-    public function setTrips(Trips $trips): self
+    public function setTrips(Trip $trips): self
     {
         // set the owning side of the relation if necessary
         if ($trips->getRequest() !== $this) {
@@ -142,14 +142,14 @@ class Orders
     }
 
     /**
-     * @return Collection<int, DelayReports>
+     * @return Collection<int, DelayReport>
      */
     public function getDelayReports(): Collection
     {
         return $this->delayReports;
     }
 
-    public function addDelayReport(DelayReports $delayReport): self
+    public function addDelayReport(DelayReport $delayReport): self
     {
         if (!$this->delayReports->contains($delayReport)) {
             $this->delayReports->add($delayReport);
@@ -159,7 +159,7 @@ class Orders
         return $this;
     }
 
-    public function removeDelayReport(DelayReports $delayReport): self
+    public function removeDelayReport(DelayReport $delayReport): self
     {
         if ($this->delayReports->removeElement($delayReport)) {
             // set the owning side to null (unless already changed)

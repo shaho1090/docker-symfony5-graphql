@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\DelayReports;
+use App\Entity\DelayReport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<DelayReports>
  *
- * @method DelayReports|null find($id, $lockMode = null, $lockVersion = null)
- * @method DelayReports|null findOneBy(array $criteria, array $orderBy = null)
- * @method DelayReports[]    findAll()
- * @method DelayReports[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method DelayReport|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DelayReport|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DelayReport[]    findAll()
+ * @method DelayReport[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class DelayReportsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, DelayReports::class);
+        parent::__construct($registry, DelayReport::class);
     }
 
-    public function save(DelayReports $entity, bool $flush = false): void
+    public function save(DelayReport $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class DelayReportsRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(DelayReports $entity, bool $flush = false): void
+    public function remove(DelayReport $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

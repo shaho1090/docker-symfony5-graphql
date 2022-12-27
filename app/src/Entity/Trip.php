@@ -6,7 +6,7 @@ use App\Repository\TripsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TripsRepository::class)]
-class Trips
+class Trip
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,11 +15,11 @@ class Trips
 
     #[ORM\ManyToOne(inversedBy: 'trips')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Users $courier = null;
+    private ?User $courier = null;
 
     #[ORM\OneToOne(inversedBy: 'trips', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Orders $request = null;
+    private ?Order $request = null;
 
     #[ORM\Column(length: 255)]
     private ?string $state = null;
@@ -29,24 +29,24 @@ class Trips
         return $this->id;
     }
 
-    public function getCourier(): ?Users
+    public function getCourier(): ?User
     {
         return $this->courier;
     }
 
-    public function setCourier(?Users $courier): self
+    public function setCourier(?User $courier): self
     {
         $this->courier = $courier;
 
         return $this;
     }
 
-    public function getRequest(): ?Orders
+    public function getRequest(): ?Order
     {
         return $this->request;
     }
 
-    public function setRequest(Orders $request): self
+    public function setRequest(Order $request): self
     {
         $this->request = $request;
 

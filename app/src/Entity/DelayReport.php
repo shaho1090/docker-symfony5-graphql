@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DelayReportsRepository::class)]
-class DelayReports
+class DelayReport
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,14 +16,14 @@ class DelayReports
 
     #[ORM\ManyToOne(inversedBy: 'delayReports')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Users $reporter = null;
+    private ?User $reporter = null;
 
     #[ORM\ManyToOne(inversedBy: 'delayReports')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Orders $request = null;
+    private ?Order $request = null;
 
     #[ORM\ManyToOne]
-    private ?Users $agent = null;
+    private ?User $agent = null;
 
     #[ORM\Column]
     private ?int $vendor_id = null;
@@ -39,36 +39,36 @@ class DelayReports
         return $this->id;
     }
 
-    public function getReporter(): ?Users
+    public function getReporter(): ?User
     {
         return $this->reporter;
     }
 
-    public function setReporter(?Users $reporter): self
+    public function setReporter(?User $reporter): self
     {
         $this->reporter = $reporter;
 
         return $this;
     }
 
-    public function getRequest(): ?Orders
+    public function getRequest(): ?Order
     {
         return $this->request;
     }
 
-    public function setRequest(?Orders $request): self
+    public function setRequest(?Order $request): self
     {
         $this->request = $request;
 
         return $this;
     }
 
-    public function getAgent(): ?Users
+    public function getAgent(): ?User
     {
         return $this->agent;
     }
 
-    public function setAgent(?Users $agent): self
+    public function setAgent(?User $agent): self
     {
         $this->agent = $agent;
 

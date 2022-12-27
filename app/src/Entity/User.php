@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -33,13 +33,13 @@ class Users
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Orders::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: 'courier', targetEntity: Trips::class)]
+    #[ORM\OneToMany(mappedBy: 'courier', targetEntity: Trip::class)]
     private Collection $trips;
 
-    #[ORM\OneToMany(mappedBy: 'reporter', targetEntity: DelayReports::class)]
+    #[ORM\OneToMany(mappedBy: 'reporter', targetEntity: DelayReport::class)]
     private Collection $delayReports;
 
     public function __construct()
@@ -127,14 +127,14 @@ class Users
     }
 
     /**
-     * @return Collection<int, Orders>
+     * @return Collection<int, Order>
      */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
-    public function addOrder(Orders $order): self
+    public function addOrder(Order $order): self
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
@@ -144,7 +144,7 @@ class Users
         return $this;
     }
 
-    public function removeOrder(Orders $order): self
+    public function removeOrder(Order $order): self
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
@@ -157,14 +157,14 @@ class Users
     }
 
     /**
-     * @return Collection<int, Trips>
+     * @return Collection<int, Trip>
      */
     public function getTrips(): Collection
     {
         return $this->trips;
     }
 
-    public function addTrip(Trips $trip): self
+    public function addTrip(Trip $trip): self
     {
         if (!$this->trips->contains($trip)) {
             $this->trips->add($trip);
@@ -174,7 +174,7 @@ class Users
         return $this;
     }
 
-    public function removeTrip(Trips $trip): self
+    public function removeTrip(Trip $trip): self
     {
         if ($this->trips->removeElement($trip)) {
             // set the owning side to null (unless already changed)
@@ -187,14 +187,14 @@ class Users
     }
 
     /**
-     * @return Collection<int, DelayReports>
+     * @return Collection<int, DelayReport>
      */
     public function getDelayReports(): Collection
     {
         return $this->delayReports;
     }
 
-    public function addDelayReport(DelayReports $delayReport): self
+    public function addDelayReport(DelayReport $delayReport): self
     {
         if (!$this->delayReports->contains($delayReport)) {
             $this->delayReports->add($delayReport);
@@ -204,7 +204,7 @@ class Users
         return $this;
     }
 
-    public function removeDelayReport(DelayReports $delayReport): self
+    public function removeDelayReport(DelayReport $delayReport): self
     {
         if ($this->delayReports->removeElement($delayReport)) {
             // set the owning side to null (unless already changed)

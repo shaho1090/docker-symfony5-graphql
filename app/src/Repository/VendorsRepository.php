@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Vendors;
+use App\Entity\Vendor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Vendors>
  *
- * @method Vendors|null find($id, $lockMode = null, $lockVersion = null)
- * @method Vendors|null findOneBy(array $criteria, array $orderBy = null)
- * @method Vendors[]    findAll()
- * @method Vendors[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Vendor|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Vendor|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Vendor[]    findAll()
+ * @method Vendor[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class VendorsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Vendors::class);
+        parent::__construct($registry, Vendor::class);
     }
 
-    public function save(Vendors $entity, bool $flush = false): void
+    public function save(Vendor $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class VendorsRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Vendors $entity, bool $flush = false): void
+    public function remove(Vendor $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
