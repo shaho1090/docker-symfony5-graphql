@@ -38,7 +38,7 @@ class OrderFixtures extends Fixture implements DependentFixtureInterface
     private function getFakeOrder(): Order
     {
         $deliveryTimes = [10, 20, 30, 40, 50, 60];
-        $now = \DateTimeImmutable::createFromMutable($this->faker->datetime());
+        $now = $this->faker->datetime();
         $order = new Order();
 
         $order->setCustomer($this->getReference(UserFixtures::REFERENCE));
