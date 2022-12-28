@@ -1,0 +1,8 @@
+App\Entity\DelayReport:
+  delay_report_{1..50}:
+    reporter: '@user_*'
+    request: '@order_*'
+    agent: '@user_*'
+    vendor_id: '<randomNumber(2)>'
+    status: '<randomElement(["read","unread"])>'
+    description: '<sentence()>'

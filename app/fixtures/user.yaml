@@ -1,0 +1,7 @@
+App\Entity\User:
+  user_{1..10}:
+    name: <name()>
+    family: <lastname()>
+    email: <email()>
+    password: <password()>
+    phone: <phoneNumber()>

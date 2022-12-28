@@ -1,0 +1,5 @@
+App\Entity\Trip:
+   trip_{1..10}:
+      courier: '@user_*'
+      request : '@order_*'
+      state: '<randomElement(["assigned","at_vendor","picked","delivered"])>'
