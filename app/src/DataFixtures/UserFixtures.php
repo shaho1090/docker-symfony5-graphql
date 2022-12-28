@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use App\Entity\Users;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -12,7 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    public const REFERENCE = 'AUTHORS_REFERENCE';
+    public const REFERENCE = 'USERS_REFERENCE';
 
     private Generator $faker;
 
