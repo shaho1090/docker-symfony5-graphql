@@ -34,6 +34,9 @@ class DelayReport
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(cascade: ['remove'],inversedBy: 'delayReports')]
+    private ?Vendor $vendor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +110,18 @@ class DelayReport
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getVendor(): ?Vendor
+    {
+        return $this->vendor;
+    }
+
+    public function setVendor(?Vendor $vendor): self
+    {
+        $this->vendor = $vendor;
 
         return $this;
     }
