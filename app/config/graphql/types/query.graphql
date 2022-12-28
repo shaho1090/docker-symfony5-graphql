@@ -1,0 +1,14 @@
+type RootQuery {
+    user(id: ID!): User
+    findUserByEmail(email: String!): User
+    users: [User!]!
+    findOrdersByUser(name: String!) : [Order!]!
+    orders: [Order!]!
+    order(id:ID!): Order
+    vendors: [Vendor!]!
+    vendor(id:ID!): Vendor
+    trip(id:ID!): Trip
+    trips: [Trip!]!
+    delayReport(id:ID!):DelayReport
+    delayReports: [DelayReport]
+}

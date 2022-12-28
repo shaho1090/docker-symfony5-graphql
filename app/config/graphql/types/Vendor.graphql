@@ -1,0 +1,4 @@
+type Vendor {
+    title: String!
+    address:String!
+}

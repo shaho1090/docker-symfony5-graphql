@@ -1,0 +1,9 @@
+type DelayReport {
+    id:ID!
+    reporter: User!
+    request: Order
+    agent: User
+    vendor: Vendor
+    status: String!
+    description: String
+}

@@ -1,0 +1,6 @@
+type Trip{
+    id:ID!,
+    courier: User!
+    order: Order!
+    state: String
+}

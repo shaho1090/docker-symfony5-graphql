@@ -1,0 +1,14 @@
+type User {
+    id: ID!
+    name: String!
+    family: String!
+    email: String!
+    phone: String
+    orders: [Order!]!
+}
+
+#input CreateAuthor {
+#    name: String!
+#    dateOfBirth: String!
+#    bio: String!
+#}

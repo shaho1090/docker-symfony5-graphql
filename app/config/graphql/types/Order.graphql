@@ -1,0 +1,6 @@
+type Order {
+    id: ID!
+    delivery_time: Int!
+    description: String!
+    vendor:Vendor!
+}
