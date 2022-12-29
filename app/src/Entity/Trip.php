@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TripRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,6 +26,14 @@ class Trip
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE,nullable: true)]
     private ?\DateTimeInterface $created_at = null;
+
+    #[ORM\OneToMany(mappedBy: 'trip', targetEntity: OrderTripState::class)]
+    private Collection $states;
+
+    public function __construct()
+    {
+        $this->states = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -62,6 +72,36 @@ class Trip
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderTripState>
+     */
+    public function getStates(): Collection
+    {
+        return $this->states;
+    }
+
+    public function addState(OrderTripState $state): self
+    {
+        if (!$this->states->contains($state)) {
+            $this->states->add($state);
+            $state->setTrip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeState(OrderTripState $state): self
+    {
+        if ($this->states->removeElement($state)) {
+            // set the owning side to null (unless already changed)
+            if ($state->getTrip() === $this) {
+                $state->setTrip(null);
+            }
+        }
 
         return $this;
     }

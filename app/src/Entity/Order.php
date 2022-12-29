@@ -52,9 +52,13 @@ class Order
     #[ORM\Column()]
     private ?int $delay_time = 0;
 
+    #[ORM\OneToMany(mappedBy: 'request', targetEntity: OrderTripState::class, orphanRemoval: true)]
+    private Collection $orderTripStates;
+
     public function __construct()
     {
         $this->delayReports = new ArrayCollection();
+        $this->orderTripStates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -213,6 +217,36 @@ class Order
     public function setDelayTime(int $delay_time): self
     {
         $this->delay_time = $delay_time;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderTripState>
+     */
+    public function getOrderTripStates(): Collection
+    {
+        return $this->orderTripStates;
+    }
+
+    public function addOrderTripState(OrderTripState $orderTripState): self
+    {
+        if (!$this->orderTripStates->contains($orderTripState)) {
+            $this->orderTripStates->add($orderTripState);
+            $orderTripState->setRequest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderTripState(OrderTripState $orderTripState): self
+    {
+        if ($this->orderTripStates->removeElement($orderTripState)) {
+            // set the owning side to null (unless already changed)
+            if ($orderTripState->getRequest() === $this) {
+                $orderTripState->setRequest(null);
+            }
+        }
 
         return $this;
     }
