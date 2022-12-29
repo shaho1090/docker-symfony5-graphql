@@ -44,6 +44,9 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'reporter', targetEntity: DelayReport::class)]
     private Collection $delayReports;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -202,6 +205,18 @@ class User implements PasswordAuthenticatedUserInterface
                 $delayReport->setReporter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
