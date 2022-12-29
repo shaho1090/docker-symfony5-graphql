@@ -49,6 +49,9 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $delivered_at = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $delivery_address = null;
+
     public function __construct()
     {
         $this->delayReports = new ArrayCollection();
@@ -198,6 +201,18 @@ class Order
     public function setDeliveredAt(?\DateTimeInterface $delivered_at): self
     {
         $this->delivered_at = $delivered_at;
+
+        return $this;
+    }
+
+    public function getDeliveryAddress(): ?string
+    {
+        return $this->delivery_address;
+    }
+
+    public function setDeliveryAddress(?string $delivery_address): self
+    {
+        $this->delivery_address = $delivery_address;
 
         return $this;
     }
