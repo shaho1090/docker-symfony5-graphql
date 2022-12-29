@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TripRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
@@ -21,8 +22,8 @@ class Trip
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $request = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $state = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE,nullable: true)]
+    private ?\DateTimeInterface $created_at = null;
 
     public function getId(): ?int
     {
@@ -53,14 +54,14 @@ class Trip
         return $this;
     }
 
-    public function getState(): ?string
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->state;
+        return $this->created_at;
     }
 
-    public function setState(string $state): self
+    public function setCreatedAt(\DateTimeInterface $created_at): self
     {
-        $this->state = $state;
+        $this->created_at = $created_at;
 
         return $this;
     }
