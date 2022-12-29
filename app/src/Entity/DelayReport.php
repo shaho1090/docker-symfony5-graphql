@@ -22,20 +22,23 @@ class DelayReport
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $request = null;
 
-    #[ORM\ManyToOne]
-    private ?User $agent = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $vendor_id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'delayReports')]
     private ?Vendor $vendor = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $created_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $viewed_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int
     {
@@ -54,26 +57,14 @@ class DelayReport
         return $this;
     }
 
-    public function getRequest(): ?Order
+    public function getOrder(): ?Order
     {
         return $this->request;
     }
 
-    public function setRequest(?Order $request): self
+    public function setOrder(?Order $request): self
     {
         $this->request = $request;
-
-        return $this;
-    }
-
-    public function getAgent(): ?User
-    {
-        return $this->agent;
-    }
-
-    public function setAgent(?User $agent): self
-    {
-        $this->agent = $agent;
 
         return $this;
     }
@@ -86,18 +77,6 @@ class DelayReport
     public function setVendorId(int $vendor_id): self
     {
         $this->vendor_id = $vendor_id;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
 
         return $this;
     }
@@ -122,6 +101,42 @@ class DelayReport
     public function setVendor(?Vendor $vendor): self
     {
         $this->vendor = $vendor;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getViewedAt(): ?\DateTimeInterface
+    {
+        return $this->viewed_at;
+    }
+
+    public function setViewedAt(?\DateTimeInterface $viewed_at): self
+    {
+        $this->viewed_at = $viewed_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }
