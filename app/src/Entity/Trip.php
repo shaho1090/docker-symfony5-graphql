@@ -27,7 +27,7 @@ class Trip
     #[ORM\Column(type: Types::DATETIME_MUTABLE,nullable: true)]
     private ?\DateTimeInterface $created_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'trip', targetEntity: OrderTripState::class)]
+    #[ORM\OneToMany(mappedBy: 'trip', targetEntity: TripState::class)]
     private Collection $states;
 
     public function __construct()
@@ -77,14 +77,14 @@ class Trip
     }
 
     /**
-     * @return Collection<int, OrderTripState>
+     * @return Collection<int, TripState>
      */
     public function getStates(): Collection
     {
         return $this->states;
     }
 
-    public function addState(OrderTripState $state): self
+    public function addState(TripState $state): self
     {
         if (!$this->states->contains($state)) {
             $this->states->add($state);
@@ -94,7 +94,7 @@ class Trip
         return $this;
     }
 
-    public function removeState(OrderTripState $state): self
+    public function removeState(TripState $state): self
     {
         if ($this->states->removeElement($state)) {
             // set the owning side to null (unless already changed)
