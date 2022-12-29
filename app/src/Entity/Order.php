@@ -157,9 +157,9 @@ class Order
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): string
     {
-        return $this->created_at;
+        return $this->created_at->format('Y-m-d H:i:s');
     }
 
     public function setCreatedAt(\DateTime $created_at): self
@@ -169,9 +169,9 @@ class Order
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): string
     {
-        return $this->updated_at;
+        return $this->updated_at->format('Y-m-d H:i:s');
     }
 
     public function setUpdatedAt(\DateTime $updated_at): self
@@ -181,9 +181,9 @@ class Order
         return $this;
     }
 
-    public function getBeDeliveredAt(): ?\DateTimeInterface
+    public function getBeDeliveredAt(): string
     {
-        return $this->be_delivered_at;
+        return $this->be_delivered_at->format('Y-m-d H:i:s');
     }
 
     public function setBeDeliveredAt(\DateTimeInterface $be_delivered_at): self
@@ -193,9 +193,13 @@ class Order
         return $this;
     }
 
-    public function getDeliveredAt(): ?\DateTimeInterface
+    public function getDeliveredAt(): ?string
     {
-        return $this->delivered_at;
+        if(is_null($this->delivered_at)){
+            return null;
+        }
+
+        return $this->delivered_at->format('Y-m-d H:i:s');
     }
 
     public function setDeliveredAt(?\DateTimeInterface $delivered_at): self
