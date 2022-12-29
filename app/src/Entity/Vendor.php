@@ -27,6 +27,9 @@ class Vendor
     #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Order::class)]
     private Collection $orders;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -99,6 +102,18 @@ class Vendor
                 $order->setVendor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }
