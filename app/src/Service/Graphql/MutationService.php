@@ -4,13 +4,19 @@
 namespace App\Service\Graphql;
 
 
+use App\Entity\DelayReport;
 use App\Entity\Order;
+use App\Entity\Trip;
+use App\Entity\TripState;
 use App\Entity\User;
 use App\Entity\Vendor;
+use App\Repository\DelayReportRepository;
+use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use App\Repository\VendorRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use SebastianBergmann\Comparator\DateTimeComparator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -20,7 +26,9 @@ class MutationService
         private EntityManagerInterface $manager,
         private UserPasswordHasherInterface $passwordHasher,
         private UserRepository $userRepository,
-        private VendorRepository $vendorRepository
+        private VendorRepository $vendorRepository,
+        private OrderRepository $orderRepository,
+        private DelayReportRepository $delayReportRepository
     )
     {
     }
@@ -77,6 +85,62 @@ class MutationService
         $this->manager->flush();
 
         return $order;
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function createTrip(array $tripDetails): Trip
+    {
+        $now = Carbon::now();
+
+        $this->manager->getConnection()->beginTransaction();
+
+        try {
+            $trip = new Trip();
+
+            $trip->setCourier($this->userRepository->find($tripDetails['courierId']));
+            $trip->setOrder($this->orderRepository->find($tripDetails['orderId']));
+            $trip->setDescription($tripDetails['description']);
+            $trip->setCreatedAt($now);
+
+            $this->manager->persist($trip);
+            $this->manager->flush();
+
+            $state = new TripState();
+            $state->setCreatedAt($now);
+            $state->setState($state::STATE_ASSIGNED);
+            $state->setTrip($trip);
+
+            $this->manager->persist($state);
+            $this->manager->flush();
+            $this->manager->getConnection()->commit();
+
+        } catch (Exception $e) {
+            $this->manager->getConnection()->rollBack();
+            throw $e;
+        }
+
+        return $trip;
+    }
+
+    public function createDelayReport($delayReportDetails): ?DelayReport
+    {
+        $now = Carbon::now();
+
+        $order = $this->orderRepository->find($delayReportDetails['orderId']);
+        $delayReport = new DelayReport();
+        $delayReport->setOrder($order);
+        $delayReport->setDescription($delayReportDetails['description']);
+        $delayReport->setCreatedAt($now);
+        $delayReport->setUpdatedAt($now);
+        $delayReport->setVendor($order->getVendor());
+        $delayReport->setReporter($order->getCustomer());
+
+        $this->manager->persist($delayReport);
+        $this->manager->flush();
+
+        return $delayReport;
     }
 
 //    public function updateBook(int $bookId, array $newDetails): Book

@@ -9,6 +9,9 @@ type RootQuery {
     vendor(id:ID!): Vendor
     trip(id:ID!): Trip
     trips: [Trip!]!
+    tripState(id:ID!): TripState
+    tripStates : [TripState!]!
     delayReport(id:ID!):DelayReport
+    reporter(id: ID!): User
     delayReports: [DelayReport]
 }

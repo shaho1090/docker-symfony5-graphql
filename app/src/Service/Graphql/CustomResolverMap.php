@@ -27,7 +27,7 @@ class CustomResolverMap extends ResolverMap
                     ResolveInfo $info
                 ) {
                     return match ($info->fieldName) {
-                        'user' => $this->queryService->findUser((int)$args['id']),
+                        'user', 'reporter' => $this->queryService->findUser((int)$args['id']),
                         'findUserByEmail' => $this->queryService->findUserByEmail((string)$args['email']),
                         'users' => $this->queryService->getAllUsers(),
                         'findOrdersByUser' => $this->queryService->findOrdersByUser($args['name']),
@@ -35,6 +35,9 @@ class CustomResolverMap extends ResolverMap
                         'order' => $this->queryService->findOrderById((int)$args['id']),
                         'vendor' => $this->queryService->findVendor((int)$args['id']),
                         'vendors' => $this->queryService->findAllVendors(),
+                        'trip' => $this->queryService->findTripById((int)$args['id']),
+                        'tripState' => $this->queryService->findState((int)$args['id']),
+                        'tripStates' => $this->queryService->findStatesByTripId((int)$args['tripId']),
                         'delayReport' => $this->queryService->findDelayReport((int)$args['id']),
                         'delayReports' => $this->queryService->findAllDelayReports(),
 
@@ -53,6 +56,8 @@ class CustomResolverMap extends ResolverMap
                         'createUser' => $this->mutationService->createUser($args['user']),
                         'createVendor' => $this->mutationService->createVendor($args['vendor']),
                         'createOrder' => $this->mutationService->createOrder($args['order']),
+                        'createTrip' => $this->mutationService->createTrip($args['trip']),
+                        'createDelayReport' => $this->mutationService->createDelayReport($args['delayReport']),
                         default => null
                     };
                 },

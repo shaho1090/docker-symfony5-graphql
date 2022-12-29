@@ -30,6 +30,9 @@ class Trip
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: TripState::class)]
     private Collection $states;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
     public function __construct()
     {
         $this->states = new ArrayCollection();
@@ -52,12 +55,12 @@ class Trip
         return $this;
     }
 
-    public function getRequest(): ?Order
+    public function getOrder(): ?Order
     {
         return $this->request;
     }
 
-    public function setRequest(Order $request): self
+    public function setOrder(Order $request): self
     {
         $this->request = $request;
 
@@ -102,6 +105,18 @@ class Trip
                 $state->setTrip(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

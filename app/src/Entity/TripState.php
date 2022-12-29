@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TripStateRepository::class)]
 class TripState
 {
+    const STATE_ASSIGNED = "assigned";
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -53,9 +55,9 @@ class TripState
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?string
     {
-        return $this->created_at;
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
     }
 
     public function setCreatedAt(\DateTimeInterface $created_at): self

@@ -118,8 +118,8 @@ class Order
     public function setTrip(Trip $trip): self
     {
         // set the owning side of the relation if necessary
-        if ($trip->getRequest() !== $this) {
-            $trip->setRequest($this);
+        if ($trip->getOrder() !== $this) {
+            $trip->setOrder($this);
         }
 
         $this->trip = $trip;
@@ -157,9 +157,9 @@ class Order
         return $this;
     }
 
-    public function getCreatedAt(): string
+    public function getCreatedAt(): ?string
     {
-        return $this->created_at->format('Y-m-d H:i:s');
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
     }
 
     public function setCreatedAt(\DateTime $created_at): self
@@ -169,9 +169,9 @@ class Order
         return $this;
     }
 
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
-        return $this->updated_at->format('Y-m-d H:i:s');
+        return $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
     }
 
     public function setUpdatedAt(\DateTime $updated_at): self
@@ -181,9 +181,9 @@ class Order
         return $this;
     }
 
-    public function getBeDeliveredAt(): string
+    public function getBeDeliveredAt(): ?string
     {
-        return $this->be_delivered_at->format('Y-m-d H:i:s');
+        return $this->be_delivered_at ? $this->be_delivered_at->format('Y-m-d H:i:s') : null;
     }
 
     public function setBeDeliveredAt(\DateTimeInterface $be_delivered_at): self

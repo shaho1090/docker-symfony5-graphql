@@ -6,10 +6,14 @@ namespace App\Service\Graphql;
 
 use App\Entity\DelayReport;
 use App\Entity\Order;
+use App\Entity\Trip;
+use App\Entity\TripState;
 use App\Entity\User;
 use App\Entity\Vendor;
 use App\Repository\DelayReportRepository;
 use App\Repository\OrderRepository;
+use App\Repository\TripRepository;
+use App\Repository\TripStateRepository;
 use App\Repository\UserRepository;
 use App\Repository\VendorRepository;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +24,9 @@ class QueryService
         private UserRepository $userRepository,
         private OrderRepository $orderRepository,
         private VendorRepository $vendorRepository,
-        private DelayReportRepository $delayReportRepository
+        private DelayReportRepository $delayReportRepository,
+        private TripRepository $tripRepository,
+        private TripStateRepository $tripStateRepository
     )
     {
     }
@@ -76,5 +82,20 @@ class QueryService
     public function findAllDelayReports(): array
     {
         return $this->delayReportRepository->findAll();
+    }
+
+    public function findTripById($tripId): ?Trip
+    {
+        return $this->tripRepository->find($tripId);
+    }
+
+    public function findStatesByTripId($tripId): Collection
+    {
+        return $this->tripRepository->find($tripId)->getStates();
+    }
+
+    public function findState($stateId): TripState
+    {
+        return $this->tripStateRepository->find($stateId);
     }
 }
