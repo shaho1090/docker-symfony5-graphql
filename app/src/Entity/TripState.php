@@ -2,21 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderTripStateRepository;
+use App\Repository\TripStateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: OrderTripStateRepository::class)]
-class OrderTripState
+#[ORM\Entity(repositoryClass: TripStateRepository::class)]
+class TripState
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'orderTripStates')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Order $request = null;
 
     #[ORM\ManyToOne(inversedBy: 'states')]
     #[ORM\JoinColumn(nullable: false)]
@@ -31,18 +27,6 @@ class OrderTripState
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRequest(): ?Order
-    {
-        return $this->request;
-    }
-
-    public function setRequest(?Order $request): self
-    {
-        $this->request = $request;
-
-        return $this;
     }
 
     public function getTrip(): ?Trip

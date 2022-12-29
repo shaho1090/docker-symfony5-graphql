@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\OrderTripState;
+use App\Entity\TripState;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<OrderTripState>
  *
- * @method OrderTripState|null find($id, $lockMode = null, $lockVersion = null)
- * @method OrderTripState|null findOneBy(array $criteria, array $orderBy = null)
- * @method OrderTripState[]    findAll()
- * @method OrderTripState[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TripState|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TripState|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TripState[]    findAll()
+ * @method TripState[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrderTripStateRepository extends ServiceEntityRepository
+class TripStateRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrderTripState::class);
+        parent::__construct($registry, TripState::class);
     }
 
-    public function save(OrderTripState $entity, bool $flush = false): void
+    public function save(TripState $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class OrderTripStateRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(OrderTripState $entity, bool $flush = false): void
+    public function remove(TripState $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
