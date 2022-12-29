@@ -3,7 +3,8 @@ type Order {
     deliveryTime: Int!
     createdAt: String!
     beDeliveredAt: String!
-    deliveredAt:String
+    deliveredAt: String
+    delayTime: String!
     deliveryAddress: String!
     description: String
     vendor:Vendor!
