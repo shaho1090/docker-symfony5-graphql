@@ -13,6 +13,7 @@ class CustomResolverMap extends ResolverMap
 {
     public function __construct(
         private QueryService $queryService,
+        private MutationService $mutationService
     ) {}
 
     protected function map()
@@ -40,7 +41,21 @@ class CustomResolverMap extends ResolverMap
                         default => null
                     };
                 },
-            ]
+            ],
+            'RootMutation' => [
+                self::RESOLVE_FIELD => function (
+                    $value,
+                    ArgumentInterface $args,
+                    ArrayObject $context,
+                    ResolveInfo $info
+                ) {
+                    return match ($info->fieldName) {
+                        'createUser' => $this->mutationService->createUser($args['user']),
+                        'createVendor' => $this->mutationService->createVendor($args['vendor']),
+                        default => null
+                    };
+                },
+            ],
         ];
     }
 }

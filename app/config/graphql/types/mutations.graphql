@@ -1,0 +1,4 @@
+type RootMutation {
+    createUser(user: CreateUser!): User!
+    createVendor(vendor: CreateVendor!): Vendor!
+}

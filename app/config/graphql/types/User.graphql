@@ -7,8 +7,10 @@ type User {
     orders: [Order!]!
 }
 
-#input CreateAuthor {
-#    name: String!
-#    dateOfBirth: String!
-#    bio: String!
-#}
+input CreateUser {
+    name: String!
+    family: String!
+    email: String!
+    password: String!
+    phone: String
+}

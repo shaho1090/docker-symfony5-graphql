@@ -1,4 +1,14 @@
 type Vendor {
+    id:ID!
     title: String!
-    address:String!
+    slug:String!
+    phone: String
+    address:String
+}
+
+input CreateVendor {
+    id:ID!
+    title: String!
+    phone: String!
+    address: String
 }
