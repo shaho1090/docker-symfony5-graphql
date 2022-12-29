@@ -25,7 +25,7 @@ class DelayReport
     #[ORM\ManyToOne]
     private ?User $agent = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $vendor_id = null;
 
     #[ORM\Column(length: 255)]
