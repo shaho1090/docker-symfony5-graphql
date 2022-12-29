@@ -52,6 +52,7 @@ class CustomResolverMap extends ResolverMap
                     return match ($info->fieldName) {
                         'createUser' => $this->mutationService->createUser($args['user']),
                         'createVendor' => $this->mutationService->createVendor($args['vendor']),
+                        'createOrder' => $this->mutationService->createOrder($args['order']),
                         default => null
                     };
                 },

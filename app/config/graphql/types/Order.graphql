@@ -1,6 +1,19 @@
 type Order {
     id: ID!
-    delivery_time: Int!
-    description: String!
+    deliveryTime: Int!
+    createdAt: String!
+    beDeliveredAt: String!
+    deliveredAt:String
+    deliveryAddress: String!
+    description: String
     vendor:Vendor!
+    customer: User!
+}
+
+input CreateOrder {
+    customerId: ID!
+    vendorId: ID!
+    deliveryTime: Int!
+    deliveryAddress: String!
+    description: String
 }

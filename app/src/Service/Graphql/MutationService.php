@@ -4,29 +4,35 @@
 namespace App\Service\Graphql;
 
 
+use App\Entity\Order;
 use App\Entity\User;
 use App\Entity\Vendor;
-use DateTime;
+use App\Repository\UserRepository;
+use App\Repository\VendorRepository;
+use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
-use GraphQL\Error\Error;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use SebastianBergmann\Comparator\DateTimeComparator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class MutationService
 {
     public function __construct(
         private EntityManagerInterface $manager,
-        private UserPasswordHasherInterface $passwordHasher
-    ) {}
+        private UserPasswordHasherInterface $passwordHasher,
+        private UserRepository $userRepository,
+        private VendorRepository $vendorRepository
+    )
+    {
+    }
 
     public function createUser(array $userDetails): User
     {
         $user = new User();
 
-        $user->setPassword($this->passwordHasher->hashPassword($user,$userDetails['password']));
-        $user->setName( $userDetails['name']);
-        $user->setFamily( $userDetails['family']);
-        $user->setEmail( $userDetails['email']);
+        $user->setPassword($this->passwordHasher->hashPassword($user, $userDetails['password']));
+        $user->setName($userDetails['name']);
+        $user->setFamily($userDetails['family']);
+        $user->setEmail($userDetails['email']);
         $user->setPhone($userDetails['phone'] ?? null);
 
         $this->manager->persist($user);
@@ -37,7 +43,7 @@ class MutationService
 
     public function createVendor(array $vendorDetails): Vendor
     {
-        $vendor =  new Vendor();
+        $vendor = new Vendor();
 
         $vendor->setTitle($vendorDetails['title']);
         $vendor->setPhone($vendorDetails['phone']);
@@ -52,6 +58,26 @@ class MutationService
         return $vendor;
     }
 
+    public function createOrder(array $orderDetails): Order
+    {
+        $order = new Order();
+
+        $order->setCustomer($this->userRepository->find($orderDetails['customerId']));
+        $order->setVendor($this->vendorRepository->find($orderDetails['vendorId']));
+        $order->setDeliveryTime($orderDetails['deliveryTime']);
+        $order->setDeliveryAddress($orderDetails['deliveryAddress']);
+        $order->setDescription($orderDetails['description'] ?? null);
+        $now = Carbon::now();
+        $order->setCreatedAt($now);
+        $order->setUpdatedAt($now);
+        $beDeliveredAt = Carbon::parse($now)->addMinutes($orderDetails['deliveryTime']);
+        $order->setBeDeliveredAt($beDeliveredAt);
+
+        $this->manager->persist($order);
+        $this->manager->flush();
+
+        return $order;
+    }
 
 //    public function updateBook(int $bookId, array $newDetails): Book
 //    {
