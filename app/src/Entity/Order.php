@@ -43,6 +43,12 @@ class Order
     #[ORM\Column]
     private ?\DateTime $updated_at = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE,nullable: true)]
+    private ?\DateTimeInterface $be_delivered_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $delivered_at = null;
+
     public function __construct()
     {
         $this->delayReports = new ArrayCollection();
@@ -168,6 +174,30 @@ class Order
     public function setUpdatedAt(\DateTime $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getBeDeliveredAt(): ?\DateTimeInterface
+    {
+        return $this->be_delivered_at;
+    }
+
+    public function setBeDeliveredAt(\DateTimeInterface $be_delivered_at): self
+    {
+        $this->be_delivered_at = $be_delivered_at;
+
+        return $this;
+    }
+
+    public function getDeliveredAt(): ?\DateTimeInterface
+    {
+        return $this->delivered_at;
+    }
+
+    public function setDeliveredAt(?\DateTimeInterface $delivered_at): self
+    {
+        $this->delivered_at = $delivered_at;
 
         return $this;
     }

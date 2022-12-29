@@ -34,7 +34,7 @@ class DelayReport
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(cascade: ['remove'],inversedBy: 'delayReports')]
+    #[ORM\ManyToOne(inversedBy: 'delayReports')]
     private ?Vendor $vendor = null;
 
     public function getId(): ?int
