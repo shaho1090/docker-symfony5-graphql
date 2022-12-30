@@ -4,6 +4,7 @@
 namespace App\Service\Factory;
 
 
+use App\Entity\DelayedOrderQueue;
 use App\Entity\DelayReport;
 use App\Entity\Order;
 use App\Entity\TripState;
@@ -46,7 +47,7 @@ class DelayReportFactoryService
         $this->manager->flush();
 
         if($order->shouldBeInDelayedQueue()){
-            $order->addToDelayedQueue($delayReport);
+            $this->addToDelayedQueue($order,$delayReport);
         }
 
         return $delayReport;
@@ -65,4 +66,16 @@ class DelayReportFactoryService
         }
     }
 
+    public function addToDelayedQueue(Order $order,DelayReport $delayReport)
+    {
+        $now = Carbon::now();
+        $delayedOrder = new DelayedOrderQueue();
+        $delayedOrder->setCreatedAt($now);
+        $delayedOrder->setOrder($order);
+        $delayedOrder->setState(DelayedOrderQueue::STATE_PENDING);
+        $delayedOrder->setDelayReport($delayReport);
+
+        $this->manager->persist($delayedOrder);
+        $this->manager->flush();
+    }
 }

@@ -266,11 +266,6 @@ class Order
         return false;
     }
 
-    public function addToDelayedQueue(DelayReport $delayReport)
-    {
-        dump('add to delayed queue');
-    }
-
     /**
      * @return Collection<int, DelayedOrderQueue>
      */
