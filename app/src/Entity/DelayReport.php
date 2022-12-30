@@ -40,6 +40,9 @@ class DelayReport
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[ORM\OneToOne(mappedBy: 'delayReport', cascade: ['persist', 'remove'])]
+    private ?DelayedOrderQueue $delayedOrderQueue = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +140,28 @@ class DelayReport
     public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getDelayedOrderQueue(): ?DelayedOrderQueue
+    {
+        return $this->delayedOrderQueue;
+    }
+
+    public function setDelayedOrderQueue(?DelayedOrderQueue $delayedOrderQueue): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($delayedOrderQueue === null && $this->delayedOrderQueue !== null) {
+            $this->delayedOrderQueue->setDelayReport(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($delayedOrderQueue !== null && $delayedOrderQueue->getDelayReport() !== $this) {
+            $delayedOrderQueue->setDelayReport($this);
+        }
+
+        $this->delayedOrderQueue = $delayedOrderQueue;
 
         return $this;
     }

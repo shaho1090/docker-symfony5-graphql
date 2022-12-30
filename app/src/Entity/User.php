@@ -47,11 +47,15 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
+    #[ORM\OneToMany(mappedBy: 'agent', targetEntity: DelayedOrderQueue::class)]
+    private Collection $delayedOrderQueues;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->trips = new ArrayCollection();
         $this->delayReports = new ArrayCollection();
+        $this->delayedOrderQueues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,6 +221,36 @@ class User implements PasswordAuthenticatedUserInterface
     public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DelayedOrderQueue>
+     */
+    public function getDelayedOrderQueues(): Collection
+    {
+        return $this->delayedOrderQueues;
+    }
+
+    public function addDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    {
+        if (!$this->delayedOrderQueues->contains($delayedOrderQueue)) {
+            $this->delayedOrderQueues->add($delayedOrderQueue);
+            $delayedOrderQueue->setAgent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    {
+        if ($this->delayedOrderQueues->removeElement($delayedOrderQueue)) {
+            // set the owning side to null (unless already changed)
+            if ($delayedOrderQueue->getAgent() === $this) {
+                $delayedOrderQueue->setAgent(null);
+            }
+        }
 
         return $this;
     }
