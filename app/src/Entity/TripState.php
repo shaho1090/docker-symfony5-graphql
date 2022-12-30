@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class TripState
 {
     const STATE_ASSIGNED = "assigned";
+    const STATE_AT_VENDOR = "at_vendor";
+    const STATE_PICKED = "picked";
+    const STATE_DELIVERED = "delivered";
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
