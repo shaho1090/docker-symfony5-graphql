@@ -10,14 +10,13 @@ use App\Entity\Trip;
 use App\Entity\TripState;
 use App\Entity\User;
 use App\Entity\Vendor;
-use App\Repository\DelayReportRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use App\Repository\VendorRepository;
+use App\Service\Factory\DelayReportFactoryService;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use SebastianBergmann\Comparator\DateTimeComparator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class MutationService
@@ -28,7 +27,7 @@ class MutationService
         private UserRepository $userRepository,
         private VendorRepository $vendorRepository,
         private OrderRepository $orderRepository,
-        private DelayReportRepository $delayReportRepository
+        private DelayReportFactoryService $delayReportFactoryService,
     )
     {
     }
@@ -124,23 +123,12 @@ class MutationService
         return $trip;
     }
 
-    public function createDelayReport($delayReportDetails): ?DelayReport
+    /**
+     * @throws Exception
+     */
+    public function createDelayReport($delayReportDetails): DelayReport|String|null
     {
-        $now = Carbon::now();
-
-        $order = $this->orderRepository->find($delayReportDetails['orderId']);
-        $delayReport = new DelayReport();
-        $delayReport->setOrder($order);
-        $delayReport->setDescription($delayReportDetails['description']);
-        $delayReport->setCreatedAt($now);
-        $delayReport->setUpdatedAt($now);
-        $delayReport->setVendor($order->getVendor());
-        $delayReport->setReporter($order->getCustomer());
-
-        $this->manager->persist($delayReport);
-        $this->manager->flush();
-
-        return $delayReport;
+        return $this->delayReportFactoryService->create($delayReportDetails);
     }
 
 //    public function updateBook(int $bookId, array $newDetails): Book
