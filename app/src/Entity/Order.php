@@ -139,7 +139,7 @@ class Order
     {
         if (!$this->delayReports->contains($delayReport)) {
             $this->delayReports->add($delayReport);
-            $delayReport->setRequest($this);
+            $delayReport->setOrder($this);
         }
 
         return $this;
@@ -149,8 +149,8 @@ class Order
     {
         if ($this->delayReports->removeElement($delayReport)) {
             // set the owning side to null (unless already changed)
-            if ($delayReport->getRequest() === $this) {
-                $delayReport->setRequest(null);
+            if ($delayReport->getOrder() === $this) {
+                $delayReport->setOrder(null);
             }
         }
 
