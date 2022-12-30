@@ -14,4 +14,5 @@ type RootQuery {
     delayReport(id:ID!):DelayReport
     reporter(id: ID!): User
     delayReports: [DelayReport]
+    newDeliveryTimeEstimation(orderId:ID!): String!
 }
