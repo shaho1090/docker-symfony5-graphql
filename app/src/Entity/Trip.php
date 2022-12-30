@@ -120,4 +120,16 @@ class Trip
 
         return $this;
     }
+
+    public function getCurrentState(): ?string
+    {
+        /** @var TripState $lastState */
+        $lastState = $this->getStates()->last();
+
+        if(is_null($lastState)){
+            return null;
+        }
+
+        return $lastState->getState();
+    }
 }
