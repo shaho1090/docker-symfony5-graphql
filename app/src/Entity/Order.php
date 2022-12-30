@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use App\Service\OrderDeliveryTimeEstimator;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -52,9 +54,15 @@ class Order
     #[ORM\Column()]
     private ?int $delay_time = 0;
 
+    private ?int $new_delivery_time_estimation = null;
+
+    #[ORM\OneToMany(mappedBy: 'request', targetEntity: DelayedOrderQueue::class, orphanRemoval: true)]
+    private Collection $delayedOrderQueues;
+
     public function __construct()
     {
         $this->delayReports = new ArrayCollection();
+        $this->delayedOrderQueues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -213,6 +221,82 @@ class Order
     public function setDelayTime(int $delay_time): self
     {
         $this->delay_time = $delay_time;
+
+        return $this;
+    }
+
+    public function deliveryTimePassed(): bool
+    {
+        return Carbon::parse($this->be_delivered_at)->isBefore(Carbon::now());
+    }
+
+    public function setNewDeliveryTimeEstimation(): void
+    {
+        $orderTrip = $this->getTrip();
+
+        if(!is_null($orderTrip) && in_array($orderTrip->getCurrentState(),TripState::getInProgressStates()) ){
+            $this->new_delivery_time_estimation = (new OrderDeliveryTimeEstimator())->get($this);
+            return;
+        }
+
+        $this->new_delivery_time_estimation = $this->delivery_time;
+    }
+
+    public function getNewDeliveryTimeEstimation(): ?int
+    {
+        if(is_null($this->new_delivery_time_estimation)){
+            $this->setNewDeliveryTimeEstimation();
+        }
+
+        return $this->new_delivery_time_estimation;
+    }
+
+    public function shouldBeInDelayedQueue(): bool
+    {
+        $orderTrip = $this->getTrip();
+
+        if(is_null($orderTrip)){
+            return true;
+        }
+
+        if(!in_array($orderTrip->getCurrentState(),TripState::getInProgressStates())){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function addToDelayedQueue(DelayReport $delayReport)
+    {
+        dump('add to delayed queue');
+    }
+
+    /**
+     * @return Collection<int, DelayedOrderQueue>
+     */
+    public function getDelayedOrderQueues(): Collection
+    {
+        return $this->delayedOrderQueues;
+    }
+
+    public function addDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    {
+        if (!$this->delayedOrderQueues->contains($delayedOrderQueue)) {
+            $this->delayedOrderQueues->add($delayedOrderQueue);
+            $delayedOrderQueue->setRequest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    {
+        if ($this->delayedOrderQueues->removeElement($delayedOrderQueue)) {
+            // set the owning side to null (unless already changed)
+            if ($delayedOrderQueue->getRequest() === $this) {
+                $delayedOrderQueue->setRequest(null);
+            }
+        }
 
         return $this;
     }
