@@ -29,6 +29,15 @@ class TripState
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    public static function getInProgressStates(): array
+    {
+        return [
+            TripState::STATE_ASSIGNED,
+            TripState::STATE_AT_VENDOR,
+            TripState::STATE_PICKED
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;
