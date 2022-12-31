@@ -123,10 +123,10 @@ class Trip
 
     public function getCurrentState(): ?string
     {
-        /** @var TripState $lastState */
+        /** @var TripState|null $lastState */
         $lastState = $this->getStates()->last();
 
-        if(is_null($lastState)){
+        if(empty($lastState)){
             return null;
         }
 
