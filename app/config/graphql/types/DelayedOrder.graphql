@@ -9,6 +9,6 @@ type DelayedOrder {
 }
 
 input AssignDelayedOrder{
-    orderId: ID!
+    id: ID!
     agentId: ID!
 }
