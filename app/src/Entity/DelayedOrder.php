@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\DelayedOrderQueueRepository;
+use App\Repository\DelayedOrderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
-#[ORM\Entity(repositoryClass: DelayedOrderQueueRepository::class)]
-class DelayedOrderQueue
+#[ORM\Entity(repositoryClass: DelayedOrderRepository::class)]
+class DelayedOrder
 {
     const STATE_PENDING = "pending";
     const STATE_CHECKING = "checking";
@@ -18,17 +19,17 @@ class DelayedOrderQueue
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'delayedOrderQueues')]
+    #[ORM\ManyToOne(inversedBy: 'delayedOrders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $request = null;
 
-    #[ORM\OneToOne(inversedBy: 'delayedOrderQueue', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'delayedOrder', cascade: ['persist', 'remove'])]
     private ?DelayReport $delayReport = null;
 
     #[ORM\Column(length: 255)]
     private ?string $state = null;
 
-    #[ORM\ManyToOne(inversedBy: 'delayedOrderQueues')]
+    #[ORM\ManyToOne(inversedBy: 'delayedOrders')]
     private ?User $agent = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
@@ -102,9 +103,9 @@ class DelayedOrderQueue
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?string
     {
-        return $this->created_at;
+        return $this->created_at ? $this->created_at->format('Y-md H:i:s') : null;
     }
 
     public function setCreatedAt(\DateTimeInterface $created_at): self
@@ -112,5 +113,20 @@ class DelayedOrderQueue
         $this->created_at = $created_at;
 
         return $this;
+    }
+
+    public function isAlreadyAssigned(): bool
+    {
+        return !is_null($this->getAgent());
+    }
+
+    public function checkingIsFinished(): bool
+    {
+        return $this->getState() != self::STATE_CHECKED;
+    }
+
+    public function isInProgress(): bool
+    {
+        return ($this->isAlreadyAssigned() && ($this->getState() != self::STATE_CHECKED));
     }
 }

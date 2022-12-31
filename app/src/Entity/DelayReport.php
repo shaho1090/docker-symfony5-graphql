@@ -41,7 +41,7 @@ class DelayReport
     private ?\DateTimeInterface $updated_at = null;
 
     #[ORM\OneToOne(mappedBy: 'delayReport', cascade: ['persist', 'remove'])]
-    private ?DelayedOrderQueue $delayedOrderQueue = null;
+    private ?DelayedOrder $delayedOrder = null;
 
     public function getId(): ?int
     {
@@ -144,16 +144,16 @@ class DelayReport
         return $this;
     }
 
-    public function getDelayedOrderQueue(): ?DelayedOrderQueue
+    public function getDelayedOrderQueue(): ?DelayedOrder
     {
-        return $this->delayedOrderQueue;
+        return $this->delayedOrder;
     }
 
-    public function setDelayedOrderQueue(?DelayedOrderQueue $delayedOrderQueue): self
+    public function setDelayedOrderQueue(?DelayedOrder $delayedOrderQueue): self
     {
         // unset the owning side of the relation if necessary
-        if ($delayedOrderQueue === null && $this->delayedOrderQueue !== null) {
-            $this->delayedOrderQueue->setDelayReport(null);
+        if ($delayedOrderQueue === null && $this->delayedOrder !== null) {
+            $this->delayedOrder->setDelayReport(null);
         }
 
         // set the owning side of the relation if necessary

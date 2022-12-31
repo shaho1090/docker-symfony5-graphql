@@ -47,15 +47,15 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[ORM\OneToMany(mappedBy: 'agent', targetEntity: DelayedOrderQueue::class)]
-    private Collection $delayedOrderQueues;
+    #[ORM\OneToMany(mappedBy: 'agent', targetEntity: DelayedOrder::class)]
+    private Collection $delayedOrders;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->trips = new ArrayCollection();
         $this->delayReports = new ArrayCollection();
-        $this->delayedOrderQueues = new ArrayCollection();
+        $this->delayedOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,26 +226,26 @@ class User implements PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, DelayedOrderQueue>
+     * @return Collection<int, DelayedOrder>
      */
-    public function getDelayedOrderQueues(): Collection
+    public function getDelayedOrders(): Collection
     {
-        return $this->delayedOrderQueues;
+        return $this->delayedOrders;
     }
 
-    public function addDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    public function addDelayedOrderQueue(DelayedOrder $delayedOrderQueue): self
     {
-        if (!$this->delayedOrderQueues->contains($delayedOrderQueue)) {
-            $this->delayedOrderQueues->add($delayedOrderQueue);
+        if (!$this->delayedOrders->contains($delayedOrderQueue)) {
+            $this->delayedOrders->add($delayedOrderQueue);
             $delayedOrderQueue->setAgent($this);
         }
 
         return $this;
     }
 
-    public function removeDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    public function removeDelayedOrder(DelayedOrder $delayedOrderQueue): self
     {
-        if ($this->delayedOrderQueues->removeElement($delayedOrderQueue)) {
+        if ($this->delayedOrders->removeElement($delayedOrderQueue)) {
             // set the owning side to null (unless already changed)
             if ($delayedOrderQueue->getAgent() === $this) {
                 $delayedOrderQueue->setAgent(null);
@@ -254,4 +254,11 @@ class User implements PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+//    public function hasActiveDelayedOrder(): bool
+//    {
+//        return $this->getDelayedOrders()->exists(function ($key,$delayedOrder){
+//            return $delayedOrder->getState() == DelayedOrder::STATE_CHECKING;
+//        });
+//    }
 }

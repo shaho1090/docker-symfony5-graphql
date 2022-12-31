@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\DelayedOrderQueue;
+use App\Entity\DelayedOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<DelayedOrderQueue>
  *
- * @method DelayedOrderQueue|null find($id, $lockMode = null, $lockVersion = null)
- * @method DelayedOrderQueue|null findOneBy(array $criteria, array $orderBy = null)
- * @method DelayedOrderQueue[]    findAll()
- * @method DelayedOrderQueue[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method DelayedOrder|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DelayedOrder|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DelayedOrder[]    findAll()
+ * @method DelayedOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DelayedOrderQueueRepository extends ServiceEntityRepository
+class DelayedOrderRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, DelayedOrderQueue::class);
+        parent::__construct($registry, DelayedOrder::class);
     }
 
-    public function save(DelayedOrderQueue $entity, bool $flush = false): void
+    public function save(DelayedOrder $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class DelayedOrderQueueRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(DelayedOrderQueue $entity, bool $flush = false): void
+    public function remove(DelayedOrder $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

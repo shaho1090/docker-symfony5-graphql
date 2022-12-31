@@ -57,13 +57,13 @@ class Order
 
     private ?int $new_delivery_time_estimation = null;
 
-    #[ORM\OneToMany(mappedBy: 'request', targetEntity: DelayedOrderQueue::class, orphanRemoval: true)]
-    private Collection $delayedOrderQueues;
+    #[ORM\OneToMany(mappedBy: 'request', targetEntity: DelayedOrder::class, orphanRemoval: true)]
+    private Collection $delayedOrders;
 
     public function __construct()
     {
         $this->delayReports = new ArrayCollection();
-        $this->delayedOrderQueues = new ArrayCollection();
+        $this->delayedOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -268,26 +268,26 @@ class Order
     }
 
     /**
-     * @return Collection<int, DelayedOrderQueue>
+     * @return Collection<int, DelayedOrder>
      */
-    public function getDelayedOrderQueues(): Collection
+    public function getDelayedOrders(): Collection
     {
-        return $this->delayedOrderQueues;
+        return $this->delayedOrders;
     }
 
-    public function addDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    public function addDelayedOrder(DelayedOrder $delayedOrderQueue): self
     {
-        if (!$this->delayedOrderQueues->contains($delayedOrderQueue)) {
-            $this->delayedOrderQueues->add($delayedOrderQueue);
+        if (!$this->delayedOrders->contains($delayedOrderQueue)) {
+            $this->delayedOrders->add($delayedOrderQueue);
             $delayedOrderQueue->setOrder($this);
         }
 
         return $this;
     }
 
-    public function removeDelayedOrderQueue(DelayedOrderQueue $delayedOrderQueue): self
+    public function removeDelayedOrder(DelayedOrder $delayedOrderQueue): self
     {
-        if ($this->delayedOrderQueues->removeElement($delayedOrderQueue)) {
+        if ($this->delayedOrders->removeElement($delayedOrderQueue)) {
             // set the owning side to null (unless already changed)
             if ($delayedOrderQueue->getOrder() === $this) {
                 $delayedOrderQueue->setOrder(null);
