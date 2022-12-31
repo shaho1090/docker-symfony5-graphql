@@ -70,7 +70,7 @@ class DelayReportFactoryService
     private function checkOrderDeliveryTime($order)
     {
         if (!$order->deliveryTimePassed()) {
-            throw new Exception(
+            throw new Error(
                 "You can set delay report after delivery time!",
                 Response::HTTP_UNPROCESSABLE_ENTITY
             );
