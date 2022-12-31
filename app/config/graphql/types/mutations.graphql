@@ -4,4 +4,5 @@ type RootMutation {
     createOrder(order: CreateOrder!): Order!
     createTrip(trip: CreateTrip!): Trip!
     createDelayReport(delayReport: CreateDelayReport!): DelayReport!
+    assignDelayedOrder(delayedOrder: AssignDelayedOrder!): DelayedOrder
 }
