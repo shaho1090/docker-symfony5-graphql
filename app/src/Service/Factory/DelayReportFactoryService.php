@@ -13,6 +13,7 @@ use App\Service\OrderDeliveryTimeEstimator;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use GraphQL\Error\Error;
 use Symfony\Component\HttpFoundation\Response;
 
 class DelayReportFactoryService
@@ -35,19 +36,29 @@ class DelayReportFactoryService
 
         $this->checkOrderDeliveryTime($order);
 
-        $delayReport = new DelayReport();
-        $delayReport->setOrder($order);
-        $delayReport->setDescription($delayReportDetails['description']);
-        $delayReport->setCreatedAt($now);
-        $delayReport->setUpdatedAt($now);
-        $delayReport->setVendor($order->getVendor());
-        $delayReport->setReporter($order->getCustomer());
+        $this->manager->getConnection()->beginTransaction();
 
-        $this->manager->persist($delayReport);
-        $this->manager->flush();
+        try{
+            $delayReport = new DelayReport();
+            $delayReport->setOrder($order);
+            $delayReport->setDescription($delayReportDetails['description']);
+            $delayReport->setCreatedAt($now);
+            $delayReport->setUpdatedAt($now);
+            $delayReport->setVendor($order->getVendor());
+            $delayReport->setReporter($order->getCustomer());
 
-        if($order->shouldBeInDelayedQueue()){
-            $this->addToDelayedQueue($order,$delayReport);
+            $this->manager->persist($delayReport);
+            $this->manager->flush();
+
+            if($order->shouldBeInDelayedQueue()){
+                $this->addToDelayedQueue($order,$delayReport);
+            }
+
+            $this->manager->commit();
+        }catch (Exception $exception){
+
+            $this->manager->rollback();
+           throw $exception;
         }
 
         return $delayReport;
