@@ -256,11 +256,11 @@ class Order
     {
         $orderTrip = $this->getTrip();
 
-        if(is_null($orderTrip)){
+        if (empty($orderTrip)) {
             return true;
         }
 
-        if(!in_array($orderTrip->getCurrentState(),TripState::getInProgressStates())){
+        if (!in_array($orderTrip->getCurrentState(), TripState::getInProgressStates())) {
             return true;
         }
 
