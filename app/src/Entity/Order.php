@@ -296,4 +296,19 @@ class Order
 
         return $this;
     }
+
+    public function hasInProgressRecordInDelayedQueue(): bool
+    {
+        return $this->delayedOrders->exists(function ($key, DelayedOrder $delayedOrder) {
+            return $delayedOrder->getState() != $delayedOrder::STATE_CHECKED;
+        });
+    }
+
+    public function hasCheckingAndAssignedRecordInQueue(): bool
+    {
+        return $this->delayedOrders->exists(function ($key, DelayedOrder $delayedOrder) {
+            return ($delayedOrder->getState() == $delayedOrder::STATE_CHECKING)
+                && $delayedOrder->isAlreadyAssigned();
+        });
+    }
 }
