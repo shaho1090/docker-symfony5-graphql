@@ -1,0 +1,14 @@
+type DelayedOrder {
+    id:ID!
+    order: Order!
+    agent: User
+    delayReport: DelayReport
+    state: String!
+    createdAt: String!
+    description: String
+}
+
+input AssignDelayedOrder{
+    orderId: ID!
+    agentId: ID!
+}
