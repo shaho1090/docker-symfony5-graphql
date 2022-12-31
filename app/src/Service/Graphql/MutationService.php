@@ -13,10 +13,10 @@ use App\Entity\User;
 use App\Entity\Vendor;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
-use App\Repository\VendorRepository;
 use App\Service\DelayedOrderAssignment\AutoAssignmentService;
 use App\Service\DelayedOrderAssignment\ManuallyAssignmentService;
 use App\Service\Factory\DelayReportFactoryService;
+use App\Service\Factory\OrderFactoryService;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -29,11 +29,11 @@ class MutationService
         private EntityManagerInterface $manager,
         private UserPasswordHasherInterface $passwordHasher,
         private UserRepository $userRepository,
-        private VendorRepository $vendorRepository,
         private OrderRepository $orderRepository,
         private DelayReportFactoryService $delayReportFactoryService,
         private ManuallyAssignmentService $manuallyAssignmentService,
         private AutoAssignmentService $autoAssignDelayedOrder,
+        private OrderFactoryService $orderFactoryService
     )
     {
     }
@@ -71,25 +71,12 @@ class MutationService
         return $vendor;
     }
 
+    /**
+     * @throws Error
+     */
     public function createOrder(array $orderDetails): Order
     {
-        $order = new Order();
-
-        $order->setCustomer($this->userRepository->find($orderDetails['customerId']));
-        $order->setVendor($this->vendorRepository->find($orderDetails['vendorId']));
-        $order->setDeliveryTime($orderDetails['deliveryTime']);
-        $order->setDeliveryAddress($orderDetails['deliveryAddress']);
-        $order->setDescription($orderDetails['description'] ?? null);
-        $now = Carbon::now();
-        $order->setCreatedAt($now);
-        $order->setUpdatedAt($now);
-        $beDeliveredAt = Carbon::parse($now)->addMinutes($orderDetails['deliveryTime']);
-        $order->setBeDeliveredAt($beDeliveredAt);
-
-        $this->manager->persist($order);
-        $this->manager->flush();
-
-        return $order;
+        return $this->orderFactoryService->create($orderDetails);
     }
 
     /**
@@ -132,7 +119,7 @@ class MutationService
     /**
      * @throws Exception
      */
-    public function createDelayReport($delayReportDetails): DelayReport|String|null
+    public function createDelayReport($delayReportDetails): DelayReport|string|null
     {
         return $this->delayReportFactoryService->create($delayReportDetails);
     }
