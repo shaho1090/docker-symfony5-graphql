@@ -79,11 +79,15 @@ class DelayReportFactoryService
 
     public function addToDelayedQueue(Order $order,DelayReport $delayReport)
     {
+        if($order->hasInProgressRecordInDelayedQueue()){
+            return;
+        }
+
         $now = Carbon::now();
-        $delayedOrder = new DelayedOrderQueue();
+        $delayedOrder = new DelayedOrder();
         $delayedOrder->setCreatedAt($now);
         $delayedOrder->setOrder($order);
-        $delayedOrder->setState(DelayedOrderQueue::STATE_PENDING);
+        $delayedOrder->setState(DelayedOrder::STATE_PENDING);
         $delayedOrder->setDelayReport($delayReport);
 
         $this->manager->persist($delayedOrder);
