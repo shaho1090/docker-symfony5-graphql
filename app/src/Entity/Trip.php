@@ -24,7 +24,7 @@ class Trip
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $request = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE,nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: TripState::class)]
@@ -126,7 +126,7 @@ class Trip
         /** @var TripState|null $lastState */
         $lastState = $this->getStates()->last();
 
-        if(empty($lastState)){
+        if (empty($lastState)) {
             return null;
         }
 
