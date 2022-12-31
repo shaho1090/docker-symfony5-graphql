@@ -40,6 +40,8 @@ class CustomResolverMap extends ResolverMap
                         'tripStates' => $this->queryService->findStatesByTripId((int)$args['tripId']),
                         'delayReport' => $this->queryService->findDelayReport((int)$args['id']),
                         'delayReports' => $this->queryService->findAllDelayReports(),
+                        'delayedOrder' => $this->queryService->findDelayedOrderById((int)$args['id']),
+                        'delayedOrders' => $this->queryService->findAllDelayedOrders(),
 
                         default => null
                     };
