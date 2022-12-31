@@ -5,22 +5,10 @@ namespace App\Service\DelayedOrderAssignment;
 
 
 use App\Entity\DelayedOrder;
-use App\Entity\Order;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Error\Error;
 
-class ManuallyAssignmentService
+class ManuallyAssignmentService extends AbstractAssignmentService
 {
-    private ?DelayedOrder $delayedOrder = null;
-    private ?User $agent = null;
-
-    public function __construct(
-        private EntityManagerInterface $entityManager
-    )
-    {
-    }
-
     /**
      * @throws Error
      */
@@ -37,39 +25,13 @@ class ManuallyAssignmentService
      */
     private function setData($delayedOrderDetails)
     {
-        $this->setOrder($delayedOrderDetails);
-        $this->setAgent($delayedOrderDetails);
-    }
+        $this->setDelayedOrder(
+            $this->findDelayedOrder($delayedOrderDetails['id'])
+        );
 
-    /**
-     * @throws Error
-     */
-    private function setOrder($delayedOrderDetails)
-    {
-        $delayedOrder = $this->entityManager->getRepository(DelayedOrder::class)
-            ->find($delayedOrderDetails['id']);
-
-        if (empty($delayedOrder)) {
-            throw new Error("Could not find delayed order for specified ID");
-        }
-
-        $this->delayedOrder = $delayedOrder;
-    }
-
-    /**
-     * @throws Error
-     */
-    private function setAgent($delayedOrderDetails)
-    {
-        $user = $this->entityManager->getRepository(User::class)
-            ->find($delayedOrderDetails['agentId']);
-
-
-        if (is_null($user)) {
-            throw new Error("Could not find user for specified ID");
-        }
-
-        $this->agent = $user;
+        $this->setAgent(
+            $this->findAgent($delayedOrderDetails['agentId'])
+        );
     }
 
     /**
@@ -111,7 +73,7 @@ class ManuallyAssignmentService
      */
     private function inspectAgentRule()
     {
-        if($this->agent->hasInProgressDelayedOrder()){
+        if ($this->agent->hasInProgressDelayedOrder()) {
             throw new Error(
                 "You can not assign the delayed order to this agent as he/she has in-progress delayed order."
             );
