@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
@@ -46,7 +45,7 @@ class Order
     #[ORM\Column]
     private ?\DateTime $updated_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE,nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $be_delivered_at = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -235,7 +234,7 @@ class Order
     {
         $orderTrip = $this->getTrip();
 
-        if(!is_null($orderTrip) && in_array($orderTrip->getCurrentState(),TripState::getInProgressStates()) ){
+        if (!is_null($orderTrip) && in_array($orderTrip->getCurrentState(), TripState::getInProgressStates())) {
             $this->new_delivery_time_estimation = (new OrderDeliveryTimeEstimator())->get($this);
             return;
         }
@@ -245,7 +244,7 @@ class Order
 
     public function getNewDeliveryTimeEstimation(): ?int
     {
-        if(is_null($this->new_delivery_time_estimation)){
+        if (is_null($this->new_delivery_time_estimation)) {
             $this->setNewDeliveryTimeEstimation();
         }
 
