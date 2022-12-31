@@ -21,12 +21,35 @@ abstract class AbstractAssignmentService
     {
     }
 
+    abstract protected function setData($delayedOrderDetails);
+
     /**
      * @param User $agent
      */
     protected function setAgent(User $agent)
     {
         $this->agent = $agent;
+    }
+
+    /**
+     * @param DelayedOrder $delayedOrder
+     */
+    protected function setDelayedOrder(DelayedOrder $delayedOrder)
+    {
+        $this->delayedOrder = $delayedOrder;
+    }
+
+    /**
+     * @throws Error
+     */
+    protected function assignDelayedOrderToAgent()
+    {
+        $this->inspectRules();
+
+        $this->delayedOrder->setAgent($this->agent);
+        $this->delayedOrder->setState($this->delayedOrder::STATE_CHECKING);
+        $this->entityManager->persist($this->delayedOrder);
+        $this->entityManager->flush();
     }
 
     /**
@@ -62,10 +85,35 @@ abstract class AbstractAssignmentService
     }
 
     /**
-     * @param DelayedOrder $delayedOrder
+     * if delayed order is already assigned and checking process has not been completed,
+     * then delayed order must not assign to another agent.
+     * @throws Error
      */
-    protected function setDelayedOrder(DelayedOrder $delayedOrder)
+    protected function inspectRules()
     {
-        $this->delayedOrder = $delayedOrder;
+        $this->inspectDelayedOrderRule();
+        $this->inspectAgentRule();
+    }
+
+    /**
+     * @throws Error
+     */
+    protected function inspectDelayedOrderRule()
+    {
+        if ($this->delayedOrder->isInProgress()) {
+            throw new Error("You can not assign this delayed order as it is in-progress.");
+        }
+    }
+
+    /**
+     * @throws Error
+     */
+    protected function inspectAgentRule()
+    {
+        if($this->agent->hasInProgressDelayedOrder()){
+            throw new Error(
+                "You can not assign the delayed order to this agent as he/she has in-progress delayed order."
+            );
+        }
     }
 }

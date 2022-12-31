@@ -14,6 +14,7 @@ use App\Entity\Vendor;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use App\Repository\VendorRepository;
+use App\Service\DelayedOrderAssignment\AutoAssignmentService;
 use App\Service\DelayedOrderAssignment\ManuallyAssignmentService;
 use App\Service\Factory\DelayReportFactoryService;
 use Carbon\Carbon;
@@ -32,6 +33,7 @@ class MutationService
         private OrderRepository $orderRepository,
         private DelayReportFactoryService $delayReportFactoryService,
         private ManuallyAssignmentService $manuallyAssignmentService,
+        private AutoAssignmentService $autoAssignDelayedOrder,
     )
     {
     }
@@ -147,8 +149,8 @@ class MutationService
     /**
      * @throws Error
      */
-    public function autoAssignDelayedOrder($agentId): ?DelayedOrder
+    public function autoAssignDelayedOrder($delayedOrderDetails): ?DelayedOrder
     {
-        return $this->manuallyAssignmentService->handle($agentId);
+        return $this->autoAssignDelayedOrder->handle($delayedOrderDetails);
     }
 }
