@@ -4,12 +4,14 @@
 namespace App\Service\Graphql;
 
 
+use App\Entity\DelayedOrder;
 use App\Entity\DelayReport;
 use App\Entity\Order;
 use App\Entity\Trip;
 use App\Entity\TripState;
 use App\Entity\User;
 use App\Entity\Vendor;
+use App\Repository\DelayedOrderRepository;
 use App\Repository\DelayReportRepository;
 use App\Repository\OrderRepository;
 use App\Repository\TripRepository;
@@ -26,7 +28,8 @@ class QueryService
         private VendorRepository $vendorRepository,
         private DelayReportRepository $delayReportRepository,
         private TripRepository $tripRepository,
-        private TripStateRepository $tripStateRepository
+        private TripStateRepository $tripStateRepository,
+        private DelayedOrderRepository $delayedOrderRepository
     )
     {
     }
@@ -97,5 +100,15 @@ class QueryService
     public function findState($stateId): TripState
     {
         return $this->tripStateRepository->find($stateId);
+    }
+
+    public function findDelayedOrderById($delayedOrderId): ?DelayedOrder
+    {
+        return $this->delayedOrderRepository->find($delayedOrderId);
+    }
+
+    public function findAllDelayedOrders(): array
+    {
+        return $this->delayedOrderRepository->findAll();
     }
 }
