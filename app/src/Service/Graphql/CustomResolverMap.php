@@ -60,6 +60,7 @@ class CustomResolverMap extends ResolverMap
                         'createOrder' => $this->mutationService->createOrder($args['order']),
                         'createTrip' => $this->mutationService->createTrip($args['trip']),
                         'createDelayReport' => $this->mutationService->createDelayReport($args['delayReport']),
+                        'assignDelayedOrder' => $this->mutationService->assignDelayedOrder($args['delayedOrder']),
                         default => null
                     };
                 },
