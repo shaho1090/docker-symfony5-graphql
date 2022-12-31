@@ -4,7 +4,7 @@
 namespace App\Service\Factory;
 
 
-use App\Entity\DelayedOrderQueue;
+use App\Entity\DelayedOrder;
 use App\Entity\DelayReport;
 use App\Entity\Order;
 use App\Entity\TripState;
