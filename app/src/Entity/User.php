@@ -255,10 +255,10 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-//    public function hasActiveDelayedOrder(): bool
-//    {
-//        return $this->getDelayedOrders()->exists(function ($key,$delayedOrder){
-//            return $delayedOrder->getState() == DelayedOrder::STATE_CHECKING;
-//        });
-//    }
+    public function hasInProgressDelayedOrder(): bool
+    {
+        return $this->getDelayedOrders()->exists(function ($key,$delayedOrder){
+            return $delayedOrder->getState() == DelayedOrder::STATE_CHECKING;
+        });
+    }
 }
