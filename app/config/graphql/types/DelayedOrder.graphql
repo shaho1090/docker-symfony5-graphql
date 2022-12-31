@@ -12,3 +12,7 @@ input AssignDelayedOrder{
     id: ID!
     agentId: ID!
 }
+
+input AutoAssignDelayedOrder{
+    agentId: ID!
+}
