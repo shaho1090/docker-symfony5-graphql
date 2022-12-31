@@ -47,14 +47,14 @@ class DelayedOrderAssignmentService
      */
     private function setOrder($delayedOrderDetails)
     {
-        $order = $this->entityManager->getRepository(Order::class)
-            ->find($delayedOrderDetails['orderId']);
+        $delayedOrder = $this->entityManager->getRepository(DelayedOrder::class)
+            ->find($delayedOrderDetails['id']);
 
-        if (empty($order)) {
-            throw new Error("Could not find order for specified ID");
+        if (empty($delayedOrder)) {
+            throw new Error("Could not find delayed order for specified ID");
         }
 
-        $this->order = $order;
+        $this->delayedOrder = $delayedOrder;
     }
 
     /**
@@ -81,6 +81,7 @@ class DelayedOrderAssignmentService
         $this->inspectRules();
 
         $this->delayedOrder->setAgent($this->agent);
+        $this->delayedOrder->setState($this->delayedOrder::STATE_CHECKING);
         $this->entityManager->persist($this->delayedOrder);
         $this->entityManager->flush();
     }
@@ -101,7 +102,7 @@ class DelayedOrderAssignmentService
      */
     private function inspectDelayedOrderRule()
     {
-        if ($this->order->hasCheckingAndAssignedRecordInQueue()) {
+        if ($this->delayedOrder->isInProgress()) {
             throw new Error("You can not assign this delayed order as it is in-progress.");
         }
     }
