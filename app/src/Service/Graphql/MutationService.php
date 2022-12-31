@@ -4,6 +4,7 @@
 namespace App\Service\Graphql;
 
 
+use App\Entity\DelayedOrder;
 use App\Entity\DelayReport;
 use App\Entity\Order;
 use App\Entity\Trip;
@@ -13,10 +14,12 @@ use App\Entity\Vendor;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use App\Repository\VendorRepository;
+use App\Service\DelayedOrderAssignmentService;
 use App\Service\Factory\DelayReportFactoryService;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use GraphQL\Error\Error;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class MutationService
@@ -28,6 +31,7 @@ class MutationService
         private VendorRepository $vendorRepository,
         private OrderRepository $orderRepository,
         private DelayReportFactoryService $delayReportFactoryService,
+        private DelayedOrderAssignmentService $assignmentService,
     )
     {
     }
