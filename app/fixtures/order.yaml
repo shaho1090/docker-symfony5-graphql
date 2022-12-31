@@ -1,0 +1,8 @@
+App\Entity\Order:
+  order_{1..100}:
+    customer: '@user_*'
+    vendor: '@vendor_*'
+    delivery_time: '<numberBetween(10, 60)>'
+    description: '<sentence()>'
+    created_at: '<dateTime()>'
+    updated_at: '<dateTime()>'

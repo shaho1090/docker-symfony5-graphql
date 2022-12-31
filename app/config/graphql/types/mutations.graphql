@@ -1,0 +1,8 @@
+type RootMutation {
+    createUser(user: CreateUser!): User!
+    createVendor(vendor: CreateVendor!): Vendor!
+    createOrder(order: CreateOrder!): Order!
+    createTrip(trip: CreateTrip!): Trip!
+    createDelayReport(delayReport: CreateDelayReport!): DelayReport!
+    assignDelayedOrder(delayedOrder: AssignDelayedOrder!): DelayedOrder
+}

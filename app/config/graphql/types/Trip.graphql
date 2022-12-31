@@ -1,0 +1,14 @@
+type Trip{
+    id:ID!,
+    courier: User!
+    order: Order!
+    tripStates: [TripState]
+    createdAt: String!
+    description: String
+}
+
+input CreateTrip{
+    courierId: ID!
+    orderId:ID!
+    description: String
+}

@@ -1,0 +1,15 @@
+type DelayReport {
+    id:ID!
+    reporter: User!
+    order: Order
+    vendor: Vendor
+    status: String!
+    viewedAt: String
+    createdAt: String!
+    description: String
+}
+
+input CreateDelayReport{
+    orderId: ID!
+    description:String
+}

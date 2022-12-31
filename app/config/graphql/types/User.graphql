@@ -1,0 +1,16 @@
+type User {
+    id: ID!
+    name: String!
+    family: String!
+    email: String!
+    phone: String
+    orders: [Order!]!
+}
+
+input CreateUser {
+    name: String!
+    family: String!
+    email: String!
+    password: String!
+    phone: String
+}
