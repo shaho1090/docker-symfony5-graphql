@@ -14,7 +14,7 @@ use App\Entity\Vendor;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use App\Repository\VendorRepository;
-use App\Service\DelayedOrderAssignmentService;
+use App\Service\DelayedOrderAssignment\ManuallyAssignmentService;
 use App\Service\Factory\DelayReportFactoryService;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,7 +31,7 @@ class MutationService
         private VendorRepository $vendorRepository,
         private OrderRepository $orderRepository,
         private DelayReportFactoryService $delayReportFactoryService,
-        private DelayedOrderAssignmentService $assignmentService,
+        private ManuallyAssignmentService $manuallyAssignmentService,
     )
     {
     }
@@ -141,6 +141,14 @@ class MutationService
      */
     public function assignDelayedOrder($delayedOrderDetails): ?DelayedOrder
     {
-        return $this->assignmentService->handle($delayedOrderDetails);
+        return $this->manuallyAssignmentService->handle($delayedOrderDetails);
+    }
+
+    /**
+     * @throws Error
+     */
+    public function autoAssignDelayedOrder($agentId): ?DelayedOrder
+    {
+        return $this->manuallyAssignmentService->handle($agentId);
     }
 }

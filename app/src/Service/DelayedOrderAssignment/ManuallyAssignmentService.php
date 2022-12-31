@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\DelayedOrderAssignment;
 
 
 use App\Entity\DelayedOrder;
@@ -10,11 +10,10 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Error\Error;
 
-class DelayedOrderAssignmentService
+class ManuallyAssignmentService
 {
     private ?DelayedOrder $delayedOrder = null;
     private ?User $agent = null;
-    private ?Order $order;
 
     public function __construct(
         private EntityManagerInterface $entityManager
