@@ -6,7 +6,7 @@
 ```
  - docker compose -f docker-compose.dev.yaml up --build -d
 ```
-4. Then go to the docker desktop, find the app container and open its command line, then run: 
+4. Then go to the docker desktop, find the project container and open the app service command-line, then run: 
 ```
 - composer install
 ```
