@@ -48,7 +48,7 @@ class DelayedOrderAssignmentService
     private function setOrder($delayedOrderDetails)
     {
         $order = $this->entityManager->getRepository(Order::class)
-            ->findBy($delayedOrderDetails['orderId']);
+            ->find($delayedOrderDetails['orderId']);
 
         if (empty($order)) {
             throw new Error("Could not find order for specified ID");
