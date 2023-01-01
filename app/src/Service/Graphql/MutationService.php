@@ -12,11 +12,13 @@ use App\Entity\TripState;
 use App\Entity\User;
 use App\Entity\Vendor;
 use App\Repository\OrderRepository;
+use App\Repository\TripStateRepository;
 use App\Repository\UserRepository;
 use App\Service\DelayedOrderAssignment\AutoAssignmentService;
 use App\Service\DelayedOrderAssignment\ManuallyAssignmentService;
 use App\Service\Factory\DelayReportFactoryService;
 use App\Service\Factory\OrderFactoryService;
+use App\Service\TripState\TripStateTransformer;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -33,7 +35,8 @@ class MutationService
         private DelayReportFactoryService $delayReportFactoryService,
         private ManuallyAssignmentService $manuallyAssignmentService,
         private AutoAssignmentService $autoAssignDelayedOrder,
-        private OrderFactoryService $orderFactoryService
+        private OrderFactoryService $orderFactoryService,
+        private TripStateTransformer $stateTransformer
     )
     {
     }
@@ -139,5 +142,21 @@ class MutationService
     public function autoAssignDelayedOrder($delayedOrderDetails): ?DelayedOrder
     {
         return $this->autoAssignDelayedOrder->handle($delayedOrderDetails);
+    }
+
+    /**
+     * @throws Error
+     */
+    public function updateTripState(array $tripDetails): Trip
+    {
+        $tip = $this->manager->getRepository(Trip::class)->find($tripDetails['id']);
+
+        if(is_null($tip)){
+            throw new Error(
+                "There is no trip for the specific ID!"
+            );
+        }
+
+        return $this->stateTransformer->handle($tip, $tripDetails['nextState']);
     }
 }
