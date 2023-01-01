@@ -32,9 +32,19 @@ class TripState
     public static function getInProgressStates(): array
     {
         return [
-            TripState::STATE_ASSIGNED,
-            TripState::STATE_AT_VENDOR,
-            TripState::STATE_PICKED
+            self::STATE_ASSIGNED,
+            self::STATE_AT_VENDOR,
+            self::STATE_PICKED
+        ];
+    }
+
+    public static function getAllStates(): array
+    {
+        return [
+            self::STATE_ASSIGNED,
+            self::STATE_AT_VENDOR,
+            self::STATE_PICKED,
+            self::STATE_DELIVERED
         ];
     }
 
