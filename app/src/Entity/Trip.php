@@ -67,9 +67,9 @@ class Trip
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?string
     {
-        return $this->created_at;
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
     }
 
     public function setCreatedAt(\DateTimeInterface $created_at): self
