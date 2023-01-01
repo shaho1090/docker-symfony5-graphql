@@ -2,7 +2,7 @@ type Trip{
     id:ID!,
     courier: User!
     order: Order!
-    tripStates: [TripState]
+    states: [TripState]
     createdAt: String!
     description: String
 }
@@ -11,4 +11,9 @@ input CreateTrip{
     courierId: ID!
     orderId:ID!
     description: String
+}
+
+input UpdateTripState{
+    id: ID!
+    nextState: String!
 }
